@@ -1,0 +1,151 @@
+First register and get token
+Login in with that token and save the token returned
+Use that token to access the rest of the routes.
+
+
+http://localhost:3000/auth/register - Post request
+{ 
+    "username": "rs",
+    "password": "rspass",
+    "first_name": "rama",
+    "last_name": "srinivas",
+    "phone": "858-695-1543"
+    
+}
+
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJzIiwiaWF0IjoxNjUxNzI5NjIyfQ.om_OT1JeoL0WWhtZE2x6Hvrp36zpAcRDl60CRlfxBGE"
+
+http://localhost:3000/auth/login - Post request
+
+{
+
+"Username": "rs",
+"Password": "rspass"
+}
+
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJzIiwiaWF0IjoxNjUxNzMwMzI3fQ.g77JjfcKkONVpM9HIu3Am8zdkbHzery5myeq7Y5dmc0"
+
+Get Request ( Gets list of users have to send the valid token in the json body)
+http://localhost:3000/users
+
+{
+	"_token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJzIiwiaWF0IjoxNjUxNzMwMzI3fQ.g77JjfcKkONVpM9HIu3Am8zdkbHzery5myeq7Y5dmc0"
+
+}
+
+- Post request
+http://localhost:3000/auth/register 
+{ 
+    "username": "ss",
+    "password": "sspass",
+    "first_name": "sumana",
+    "last_name": "srinivas",
+    "phone": "858-695-1000"
+    
+}
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNzIiwiaWF0IjoxNjUxNzMyOTk1fQ.uqfqs-aCFx8Xk7kSCIFuhQxQaDB83pk3GEEZleLOHME"
+}
+
+
+http://localhost:3000/messages
+{
+    "_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNzIiwiaWF0IjoxNjUxNzMyOTk1fQ.uqfqs-aCFx8Xk7kSCIFuhQxQaDB83pk3GEEZleLOHME",
+    "to_username": "rs",
+    "body": "test message"
+}
+
+{
+    "message": {
+        "id": 2,
+        "from_username": "ss",
+        "to_username": "rs",
+        "body": "test message",
+        "sent_at": "2022-05-05T06:46:20.435Z"
+    }
+}
+
+Get Request, CREATE A message 
+http://localhost:3000/messages
+{
+    "_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJzIiwiaWF0IjoxNjUxNzI5NjIyfQ.om_OT1JeoL0WWhtZE2x6Hvrp36zpAcRDl60CRlfxBGE",
+    "to_username": "ss",
+    "body": "test message2"
+}
+
+POST request:
+http://localhost:3000/auth/register
+{
+   "username": "as",
+    "password": "aspass",
+    "first_name": "anjana",
+    "last_name": "srinivas",
+    "phone": "858-395-0922"
+}
+
+CREATE A message by ss using ss token, the sender is username 'as'
+http://localhost:3000/messages
+{
+    "_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNzIiwiaWF0IjoxNjUxNzM4NTIzfQ.b4Fpz6BhwHljUzZeXlFCr_JYDXNlPABf8Tk9gP64cdg",
+    "to_username": "as",
+    "body": "test message3"
+}
+
+Get Request: Get all the messages from (sent by) user 'ss', the token in the 
+body should be token for 'ss' so that way only ss user can view the messages it sent.
+http://localhost:3000/users/ss/from
+{
+    "_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNzIiwiaWF0IjoxNjUxNzM4NTIzfQ.b4Fpz6BhwHljUzZeXlFCr_JYDXNlPABf8Tk9gP64cdg"
+
+}
+
+
+Get Request: Get all the messages  to (recieved by) user 'ss'. The _token should
+be the token for user 'ss' so that way only ss user can view the messages it 
+recieved.
+
+http://localhost:3000/users/ss/to
+{
+    "_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNzIiwiaWF0IjoxNjUxNzM4NTIzfQ.b4Fpz6BhwHljUzZeXlFCr_JYDXNlPABf8Tk9gP64cdg"
+
+}
+
+Get details about user 'ss'. The token in the body has to be a valid token for 
+user 'ss'
+http://localhost:3000/users/ss
+{
+    "_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNzIiwiaWF0IjoxNjUxNzM4NTIzfQ.b4Fpz6BhwHljUzZeXlFCr_JYDXNlPABf8Tk9gP64cdg"
+
+}
+
+Get details of the message ( token should be receiver or sender of message id 2)
+http://localhost:3000/messages/2
+{
+    "_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNzIiwiaWF0IjoxNjUxNzM4NTIzfQ.b4Fpz6BhwHljUzZeXlFCr_JYDXNlPABf8Tk9gP64cdg"
+}
+
+Post Request: ONly the user that receives message 3 can mark as read. Other users 
+will get unathorized error.
+http://localhost:3000/messages/3/read
+{
+  "_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFzIiwiaWF0IjoxNjUxNzQwMzgyfQ.r3JKWWw7-jioaOwTyVjScL_XJb2D_V-bcTdZwKyQdmQ"
+}
+
+
+--------------------------------------------------------------------------
+as token
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFzIiwiaWF0IjoxNjUxNzQwMzgyfQ.r3JKWWw7-jioaOwTyVjScL_XJb2D_V-bcTdZwKyQdmQ"
+}
+
+
+rs token
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJzIiwiaWF0IjoxNjUxNzM4NDY2fQ.R9-FXivlt94moqEKaixa32goo_Hi2Wfdp3lFbnrQb74"
+}
+
+ss token
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNzIiwiaWF0IjoxNjUxNzM4NTIzfQ.b4Fpz6BhwHljUzZeXlFCr_JYDXNlPABf8Tk9gP64cdg"
+}
